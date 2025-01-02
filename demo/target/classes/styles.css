@@ -1,0 +1,64 @@
+.root {
+    -fx-background-color: #f5f5f5;
+}
+
+.content-panel {
+    -fx-padding: 10;
+    -fx-spacing: 10;
+}
+
+.action-button {
+    -fx-background-color: #2196f3;
+    -fx-text-fill: white;
+    -fx-padding: 5 15;
+}
+
+.action-button:hover {
+    -fx-background-color: #1976d2;
+}
+
+.search-field {
+    -fx-pref-width: 200;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
+}
+
+/* Pour les entêtes de colonnes de la table */
+.table-view .column-header {
+    -fx-background-color: #2196f3;
+    -fx-text-fill: white;
+}
+
+/* Pour les textes des colonnes dans la table */
+.table-view .table-cell {
+    -fx-text-fill: black; /* Change la couleur du texte en noir */
+    -fx-font-weight: bold; /* Met le texte en gras */
+}
+
+.menu-bar {
+    -fx-background-color: #2196f3;
+}
+
+.menu-bar .label {
+    -fx-text-fill: black; /* Change la couleur du texte en noir */
+    -fx-font-weight: bold; /* Met le texte en gras */
+}
+
+.menu-item {
+    -fx-padding: 5 10;
+    -fx-text-fill: black; /* Change la couleur du texte en noir */
+    -fx-font-weight: bold; /* Met le texte en gras */
+}
+
+.menu-item:hover {
+    -fx-background-color: #1976d2;
+}
+
+/* Pour les autres textes du layout */
+.label, .text, .button, .menu-item, .table-column-header, .table-cell {
+    -fx-text-fill: black; /* Change la couleur du texte en noir */
+    -fx-font-weight: bold; /* Met le texte en gras */
+}

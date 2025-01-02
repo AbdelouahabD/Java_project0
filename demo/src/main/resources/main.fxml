@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.controllers.MainController"
+            stylesheets="/styles.css"
+            prefHeight="600.0" prefWidth="800.0">
+
+    <!-- Menu Bar -->
+    <top>
+        <MenuBar>
+            <Menu text="Gestion">
+                <MenuItem text="Utilisateurs" onAction="#showUsersView"/>
+                <MenuItem text="Salles" onAction="#showRoomsView"/>
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <!-- Tab Pane -->
+    <center>
+        <TabPane fx:id="mainTabPane">
+            <Tab text="Utilisateurs" closable="false">
+                <VBox spacing="10" styleClass="content-panel">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button text="Ajouter" onAction="#addUser" styleClass="action-button"/>
+                        <Button text="Modifier" onAction="#editUser" styleClass="action-button"/>
+                        <Button text="Supprimer" onAction="#deleteUser" styleClass="action-button"/>
+                        <TextField fx:id="searchUserField" promptText="Rechercher..." styleClass="search-field"/>
+                    </HBox>
+                    
+                    <!-- Table for displaying users -->
+                    <TableView fx:id="userTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="idColumn" text="ID" />
+                            <TableColumn fx:id="nomColumn" text="Nom" />
+                            <TableColumn fx:id="prenomColumn" text="Prénom" />
+                            <TableColumn fx:id="emailColumn" text="Email" />
+                            <TableColumn fx:id="roleColumn" text="Rôle" />
+                        </columns>
+                    </TableView>
+
+                </VBox>
+            </Tab>
+
+            <!-- Tab for Rooms (Salle) -->
+            <Tab text="Salles" closable="false">
+                <VBox spacing="10" styleClass="content-panel">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button text="Ajouter" onAction="#addRoom" styleClass="action-button"/>
+                        <Button text="Modifier" onAction="#editRoom" styleClass="action-button"/>
+                        <Button text="Supprimer" onAction="#deleteRoom" styleClass="action-button"/>
+                        <TextField fx:id="searchRoomField" promptText="Rechercher une salle..." styleClass="search-field"/>
+                    </HBox>
+
+                    <!-- Table for displaying rooms -->
+                    <TableView fx:id="roomTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="roomIdColumn" text="ID" />
+                            <TableColumn fx:id="roomNameColumn" text="Nom" />
+                            <TableColumn fx:id="roomCapacityColumn" text="Capacité" />
+                        </columns>
+                    </TableView>
+
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+
+    <padding>
+        <Insets top="5" right="5" bottom="5" left="5"/>
+    </padding>
+
+</BorderPane>
