@@ -3,6 +3,7 @@ C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\
 C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\model\DatabaseConnection.java
 C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\dd\UtilisateurDAO.java
 C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\App.java
+C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\controllers\ReservationController.java
 C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\model\User.java
 C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\model\Evenement.java
 C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\model\Salle.java
@@ -10,8 +11,10 @@ C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\
 C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\dd\SalleDAO.java
 C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\dd\ReservationDAO.java
 C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\controllers\MainController.java
-C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\controllers\RoomsController.java
+C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\controllers\TerrainController.java
+C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\controllers\UserController.java
+C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\controllers\RoomController.java
 C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\dd\TransactionManager.java
+C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\controllers\EventController.java
 C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\model\Terrain.java
 C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\dd\EvenmentsDAO.java
-C:\Users\dell\Desktop\java_tp\projet_java\rendu2\demo\src\main\java\com\example\controllers\abdo.java

@@ -15,11 +15,11 @@ import com.example.model.Reservation;
 
 public class ReservationDAO implements GenericDAO<Reservation> {
 
-    private static final String DELETE_RESERVATION_SQL = "DELETE FROM reservation WHERE id_reservation = ?";
-    private static final String UPDATE_RESERVATION_SQL = "UPDATE reservation SET id_user = ?, id_event = ?, id_salle = ?, id_terrain = ?, date_reservation = ? WHERE id_reservation = ?";
-    private static final String GET_ALL_RESERVATIONS_SQL = "SELECT * FROM reservation";
-    private static final String GET_RESERVATION_BY_ID_SQL = "SELECT * FROM reservation WHERE id_reservation = ?";
-    private static final String INSERT_RESERVATION_SQL = "INSERT INTO reservation (id_user, id_event, id_salle, id_terrain, date_reservation) VALUES (?, ?, ?, ?, ?)";
+    private static final String DELETE_RESERVATION_SQL = "DELETE FROM reservations WHERE id_reservation = ?";
+    private static final String UPDATE_RESERVATION_SQL = "UPDATE reservations SET id_user = ?, id_event = ?, id_salle = ?, id_terrain = ?, date_reservation = ? WHERE id_reservation = ?";
+    private static final String GET_ALL_RESERVATIONS_SQL = "SELECT * FROM reservations";
+    private static final String GET_RESERVATION_BY_ID_SQL = "SELECT * FROM reservations WHERE id_reservation = ?";
+    private static final String INSERT_RESERVATION_SQL = "INSERT INTO reservations (id_user, id_event, id_salle, id_terrain, date_reservation) VALUES (?, ?, ?, ?, ?)";
 
     @Override
     public void delete(int id) {

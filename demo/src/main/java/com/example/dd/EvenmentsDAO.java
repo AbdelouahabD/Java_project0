@@ -18,7 +18,7 @@ public class EvenmentsDAO implements GenericDAO<Evenement> {
 
     @Override
     public void delete(int id) {
-        String sql = "DELETE FROM evenement WHERE id_event = ?";
+        String sql = "DELETE FROM evenemant WHERE id_event = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -31,7 +31,7 @@ public class EvenmentsDAO implements GenericDAO<Evenement> {
 
     @Override
     public void update(Evenement evenement) {
-        String sql = "UPDATE evenement SET nom_event = ?, date_event = ?, description = ?, id_user = ? WHERE id_event = ?";
+        String sql = "UPDATE evenemant SET nom_event = ?, date_event = ?, description = ?, id_user = ? WHERE id_event = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, evenement.getNomEvent());
@@ -49,7 +49,7 @@ public class EvenmentsDAO implements GenericDAO<Evenement> {
     @Override
     public List<Evenement> getAll() {
         List<Evenement> events = new ArrayList<>();
-        String sql = "SELECT * FROM evenement";
+        String sql = "SELECT * FROM evenemant";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -70,7 +70,7 @@ public class EvenmentsDAO implements GenericDAO<Evenement> {
 
     @Override
     public Evenement get(int id) {
-        String sql = "SELECT * FROM evenement WHERE id_event = ?";
+        String sql = "SELECT * FROM evenemant WHERE id_event = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -93,7 +93,7 @@ public class EvenmentsDAO implements GenericDAO<Evenement> {
 
     @Override
     public void add(Evenement evenement) {
-        String sql = "INSERT INTO evenement (nom_event, date_event, description, id_user) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO evenemant (nom_event, date_event, description, id_user) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             if (evenement.getDateEvent() == null) {

@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.controllers.RoomController">
+   
+      <!-- spacing="10" styleClass="content-panel"> -->
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.controllers.RoomsController">
-    
-    <TableView fx:id="salleTable" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10">
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button text="Ajouter" onAction="#addRoom" styleClass="action-button"/>
+        <Button text="Modifier" onAction="#editRoom" styleClass="action-button"/>
+        <Button text="Supprimer" onAction="#deleteRoom" styleClass="action-button"/>
+        <TextField fx:id="searchRoomField" promptText="Rechercher une salle..." styleClass="search-field"/>
+    </HBox>
+
+    <TableView fx:id="roomTable" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn fx:id="idColumn" text="ID" />
-            <TableColumn fx:id="nomColumn" text="Nom" />
-            <TableColumn fx:id="capaciteColumn" text="Capacité" />
+            <TableColumn fx:id="roomIdColumn" text="ID" />
+            <TableColumn fx:id="roomNameColumn" text="Nom" />
+            <TableColumn fx:id="roomCapacityColumn" text="Capacité" />
         </columns>
     </TableView>
-</AnchorPane>
+</VBox>

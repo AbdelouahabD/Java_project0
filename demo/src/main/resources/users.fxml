@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.controllers.UserController"
+      spacing="10" styleClass="content-panel">
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
-      spacing="10" padding="10">
-    
     <HBox spacing="10" alignment="CENTER_LEFT">
-        <TextField fx:id="searchUserField" promptText="Rechercher..." HBox.hgrow="ALWAYS"/>
-        <Button text="Ajouter" onAction="#addUser"/>
-        <Button text="Modifier" onAction="#editUser"/>
-        <Button text="Supprimer" onAction="#deleteUser"/>
+        <Button text="Ajouter" onAction="#addUser" styleClass="action-button"/>
+        <Button text="Modifier" onAction="#editUser" styleClass="action-button"/>
+        <Button text="Supprimer" onAction="#deleteUser" styleClass="action-button"/>
+        <TextField fx:id="searchUserField" promptText="Rechercher..." styleClass="search-field"/>
     </HBox>
-    
+
     <TableView fx:id="userTable" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
-            <TableColumn fx:id="nomColumn" text="Nom" prefWidth="150"/>
-            <TableColumn fx:id="prenomColumn" text="Prénom" prefWidth="150"/>
-            <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
-            <TableColumn fx:id="roleColumn" text="Rôle" prefWidth="100"/>
+            <TableColumn fx:id="idColumn" text="ID" />
+            <TableColumn fx:id="nomColumn" text="Nom" />
+            <TableColumn fx:id="prenomColumn" text="Prénom" />
+            <TableColumn fx:id="emailColumn" text="Email" />
+            <TableColumn fx:id="roleColumn" text="Rôle" />
         </columns>
     </TableView>
 </VBox>
