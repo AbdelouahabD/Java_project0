@@ -118,4 +118,4 @@ public class UtilisateurDAO implements GenericDAO<User> {
             System.err.println("Erreur lors de l'insertion de l'utilisateur : " + e.getMessage());
         }
     }
-}
+}                                                     

@@ -16,6 +16,8 @@
             <Menu text="Gestion">
                 <MenuItem text="Utilisateurs" onAction="#showUsersView"/>
                 <MenuItem text="Salles" onAction="#showRoomsView"/>
+                <MenuItem text="Terrains" onAction="#showTerrainView"/>
+                <MenuItem text="Réservations" onAction="#showReservationsView"/>
             </Menu>
         </MenuBar>
     </top>
@@ -23,6 +25,7 @@
     <!-- Tab Pane -->
     <center>
         <TabPane fx:id="mainTabPane">
+            <!-- Users Tab -->
             <Tab text="Utilisateurs" closable="false">
                 <VBox spacing="10" styleClass="content-panel">
                     <HBox spacing="10" alignment="CENTER_LEFT">
@@ -32,7 +35,6 @@
                         <TextField fx:id="searchUserField" promptText="Rechercher..." styleClass="search-field"/>
                     </HBox>
                     
-                    <!-- Table for displaying users -->
                     <TableView fx:id="userTable" VBox.vgrow="ALWAYS">
                         <columns>
                             <TableColumn fx:id="idColumn" text="ID" />
@@ -42,11 +44,10 @@
                             <TableColumn fx:id="roleColumn" text="Rôle" />
                         </columns>
                     </TableView>
-
                 </VBox>
             </Tab>
 
-            <!-- Tab for Rooms (Salle) -->
+            <!-- Rooms Tab -->
             <Tab text="Salles" closable="false">
                 <VBox spacing="10" styleClass="content-panel">
                     <HBox spacing="10" alignment="CENTER_LEFT">
@@ -56,7 +57,6 @@
                         <TextField fx:id="searchRoomField" promptText="Rechercher une salle..." styleClass="search-field"/>
                     </HBox>
 
-                    <!-- Table for displaying rooms -->
                     <TableView fx:id="roomTable" VBox.vgrow="ALWAYS">
                         <columns>
                             <TableColumn fx:id="roomIdColumn" text="ID" />
@@ -64,9 +64,74 @@
                             <TableColumn fx:id="roomCapacityColumn" text="Capacité" />
                         </columns>
                     </TableView>
-
                 </VBox>
             </Tab>
+
+            <!-- Terrains Tab -->
+            <Tab text="Terrains" closable="false">
+                <VBox spacing="10" styleClass="content-panel">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button text="Ajouter" onAction="#addTerrain" styleClass="action-button"/>
+                        <Button text="Modifier" onAction="#editTerrain" styleClass="action-button"/>
+                        <Button text="Supprimer" onAction="#deleteTerrain" styleClass="action-button"/>
+                        <TextField fx:id="searchTerrainField" promptText="Rechercher un terrain..." styleClass="search-field"/>
+                    </HBox>
+                    
+                    <TableView fx:id="terrainTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="terrainIdColumn" text="ID" />
+                            <TableColumn fx:id="terrainNameColumn" text="Nom" />
+                            <TableColumn fx:id="terrainTypeColumn" text="Type" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <!-- Events Tab -->
+            <Tab text="Événements" closable="false">
+                <VBox spacing="10" styleClass="content-panel">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button text="Ajouter" onAction="#addEvent" styleClass="action-button"/>
+                        <Button text="Modifier" onAction="#editEvent" styleClass="action-button"/>
+                        <Button text="Supprimer" onAction="#deleteEvent" styleClass="action-button"/>
+                        <TextField fx:id="searchEventField" promptText="Rechercher un événement..." styleClass="search-field"/>
+                    </HBox>
+
+                    <TableView fx:id="eventTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="eventIdColumn" text="ID" />
+                            <TableColumn fx:id="eventNameColumn" text="Nom" />
+                            <TableColumn fx:id="eventDateColumn" text="Date" />
+                            <TableColumn fx:id="eventDescriptionColumn" text="Description" />
+                            <TableColumn fx:id="eventUserIdColumn" text="Utilisateur" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <!-- Reservations Tab -->
+            <Tab text="Réservations" closable="false">
+                <VBox spacing="10" styleClass="content-panel">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button text="Ajouter" onAction="#addReservation" styleClass="action-button"/>
+                        <Button text="Modifier" onAction="#editReservation" styleClass="action-button"/>
+                        <Button text="Supprimer" onAction="#deleteReservation" styleClass="action-button"/>
+                        <TextField fx:id="searchReservationField" promptText="Rechercher une réservation..." styleClass="search-field"/>
+                    </HBox>
+                    
+                    <TableView fx:id="reservationTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="reservationIdColumnR" text="ID" />
+                            <TableColumn fx:id="userIdColumnR" text="Utilisateur" />
+                            <TableColumn fx:id="eventIdColumnR" text="Événement" />
+                            <TableColumn fx:id="roomIdColumnR" text="Salle" />
+                            <TableColumn fx:id="terrainIdColumnR" text="Terrain" />
+                            <TableColumn fx:id="dateReservationColumnR" text="Date de Réservation" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
         </TabPane>
     </center>
 
