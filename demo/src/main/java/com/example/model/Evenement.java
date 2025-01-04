@@ -35,12 +35,6 @@ public class Evenement {
 
     @Override
     public String toString() {
-        return "event{" +
-                "idevent=" + idEvent +
-                ", nomevent='" + nomEvent + '\'' +
-                ", dateevent=" + dateEvent +
-                ", description='" + description + '\'' +
-                ", iduser=" + idUser +
-                '}';
+        return  nomEvent;
     }
 }

@@ -129,14 +129,16 @@ public class UserController {
         TextField nomField = new TextField();
         TextField prenomField = new TextField();
         TextField emailField = new TextField();
-        TextField roleField = new TextField();
+        ComboBox<String> comboBox = new ComboBox<>();
+
+        // Add items to the ComboBox
+        comboBox.getItems().addAll("ETUDIANT","PROFESSEUR");
         
         if (user != null) {
             nomField.setText(user.getNom());
             prenomField.setText(user.getPrenom());
             emailField.setText(user.getEmail());
-            roleField.setText(user.getType());
-        }
+            }
         
         grid.add(new Label("Nom:"), 0, 0);
         grid.add(nomField, 1, 0);
@@ -145,7 +147,7 @@ public class UserController {
         grid.add(new Label("Email:"), 0, 2);
         grid.add(emailField, 1, 2);
         grid.add(new Label("Rôle:"), 0, 3);
-        grid.add(roleField, 1, 3);
+        grid.add(comboBox, 1, 3);
         
         dialog.getDialogPane().setContent(grid);
         
@@ -153,12 +155,12 @@ public class UserController {
             if (dialogButton == saveButtonType) {
                 if (user == null) {
                     return new User(nomField.getText(), prenomField.getText(), 
-                                  emailField.getText(), roleField.getText());
+                                  emailField.getText(), comboBox.getSelectionModel().getSelectedItem());
                 } else {
                     user.setNom(nomField.getText());
                     user.setPrenom(prenomField.getText());
                     user.setEmail(emailField.getText());
-                    user.setType(roleField.getText());
+                    user.setType(comboBox.getSelectionModel().getSelectedItem());
                     return user;
                 }
             }

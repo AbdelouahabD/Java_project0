@@ -12,6 +12,9 @@ import javafx.collections.transformation.FilteredList;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import com.example.model.User;
+import com.example.dd.UtilisateurDAO;
 
 public class EventController {
     @FXML private TableView<Evenement> eventTable;
@@ -127,19 +130,33 @@ public class EventController {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        
+        ArrayList<User> users=new UtilisateurDAO().getAll();
         TextField nomField = new TextField();
         DatePicker datePicker = new DatePicker();
-        TextField timeField = new TextField();
         TextArea descriptionArea = new TextArea();
-        TextField userIdField = new TextField();
+        ComboBox<User> userIdField = new ComboBox<>();
+        ComboBox<String> timeComboBox = new ComboBox<>();
+        timeComboBox.getItems().addAll(
+                 "08:30","08:45","09:00","09:15","09:30","09:45",
+                             "10:00","10:15","10:30","10:45","11:00","11:15",
+                             "11:30","11:45","12:00","12:15","12:30","12:45",
+                             "13:00","13:15","13:30","13:45","14:00","14:15",
+                             "14:30","14:45","15:00","15:15","15:30","15:45",
+                             "16:00","16:15","16:30","16:45","17:00","17:15",
+                             "17:30","17:45","18:00","18:15","18:30","18:45",
+                             "19:00","19:15","19:30","19:45","20:00","20:15",
+                             "20:30","20:45","21:00","21:15","21:30","21:45",
+                             "22:00" );
+                   for (User user : users) {
+                    userIdField.getItems().add(user);
+                   }          
         
         if (event != null) {
             nomField.setText(event.getNomEvent());
             datePicker.setValue(event.getDateEvent().toLocalDate());
-            timeField.setText(event.getDateEvent().toLocalTime().toString());
+            timeComboBox.setValue(event.getDateEvent().toLocalTime().toString());
             descriptionArea.setText(event.getDescription());
-            userIdField.setText(String.valueOf(event.getIdUser()));
+            // userIdField.setText(String.valueOf(event.getIdUser()));
         }
         
         grid.add(new Label("Nom:"), 0, 0);
@@ -147,10 +164,10 @@ public class EventController {
         grid.add(new Label("Date:"), 0, 1);
         grid.add(datePicker, 1, 1);
         grid.add(new Label("Heure:"), 0, 2);
-        grid.add(timeField, 1, 2);
+        grid.add(timeComboBox, 1, 2);
         grid.add(new Label("Description:"), 0, 3);
         grid.add(descriptionArea, 1, 3);
-        grid.add(new Label("ID Utilisateur:"), 0, 4);
+        grid.add(new Label("Utilisateur:"), 0, 4);
         grid.add(userIdField, 1, 4);
         
         dialog.getDialogPane().setContent(grid);
@@ -160,7 +177,7 @@ public class EventController {
                 try {
                     LocalDateTime dateTime = LocalDateTime.of(
                         datePicker.getValue(),
-                        LocalTime.parse(timeField.getText())
+                        LocalTime.parse(timeComboBox.getSelectionModel().getSelectedItem())
                     );
                     
                     if (event == null) {
@@ -168,13 +185,13 @@ public class EventController {
                             nomField.getText(),
                             dateTime,
                             descriptionArea.getText(),
-                            Integer.parseInt(userIdField.getText())
+                            userIdField.getSelectionModel().getSelectedItem().getIdUser()
                         );
                     } else {
                         event.setNomEvent(nomField.getText());
                         event.setDateEvent(dateTime);
                         event.setDescription(descriptionArea.getText());
-                        event.setIdUser(Integer.parseInt(userIdField.getText()));
+                        event.setIdUser(userIdField.getSelectionModel().getSelectedItem().getIdUser());
                         return event;
                     }
                 } catch (NumberFormatException e) {

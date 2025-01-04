@@ -8,17 +8,19 @@ public class Reservation {
     private Integer id_salle;
     private Integer id_terrain;
     private LocalDateTime date_reservation;
+    private int duree;
 
     // Constructeurs
     public Reservation() {}
 
     public Reservation(Integer id_user, Integer id_event, Integer id_salle, 
-                       Integer id_terrain, LocalDateTime date_reservation) {
+                       Integer id_terrain, LocalDateTime date_reservation,int duree) {
         this.id_user = id_user;
         this.id_event = id_event;
         this.id_salle = id_salle;
         this.id_terrain = id_terrain;
         this.date_reservation = date_reservation;
+        this.duree=duree;
     }
 
     // Getters et setters
@@ -34,7 +36,8 @@ public class Reservation {
     public void setId_terrain(Integer id_terrain) { this.id_terrain = id_terrain; }
     public LocalDateTime getDate_reservation() { return date_reservation; }
     public void setDate_reservation(LocalDateTime date_reservation) { this.date_reservation = date_reservation; }
-
+    public int getDuree(){return duree;}
+    public void setDuree(int duree){this.duree = duree;}
     
 
     @Override

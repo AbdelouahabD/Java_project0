@@ -25,10 +25,6 @@ public class Salle {
     
         @Override
         public String toString() {
-            return "salless{" +
-                    "id_salle=" + id_salle +
-                    ", nom_salle='" + nom_salle + '\'' +
-                    ", capacite=" + capacite +
-                    '}';
+            return nom_salle;
         }
     }

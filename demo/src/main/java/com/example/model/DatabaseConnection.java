@@ -2,8 +2,6 @@ package com.example.model;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import javax.sql.DataSource;
-import org.mariadb.jdbc.MariaDbDataSource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -13,9 +11,9 @@ public class DatabaseConnection {
     static {
         try {
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl("jdbc:mysql://localhost:3306/gestion_evenement");
+            config.setJdbcUrl("jdbc:mysql://localhost:3306/testdb");
             config.setUsername("root");
-            config.setPassword("");
+            config.setPassword("mahdi2005");
             config.setMaximumPoolSize(10);
             
             dataSource = new HikariDataSource(config);

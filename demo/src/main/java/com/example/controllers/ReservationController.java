@@ -1,8 +1,7 @@
 package com.example.controllers;
 
 
-import com.example.model.Reservation;
-import com.example.dd.ReservationDAO;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -10,9 +9,20 @@ import javafx.scene.layout.GridPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.TimeZone;
+
+import com.example.model.*;
+import com.example.dd.*;
 public class ReservationController {
     // Reservation Tab Components
 @FXML private TableView<Reservation> reservationTable;
@@ -137,34 +147,116 @@ private Dialog<Reservation> createReservationDialog(String title, Reservation re
     grid.setHgap(10);
     grid.setVgap(10);
     
-    TextField userIdField = new TextField();
-    TextField eventIdField = new TextField();
-    TextField salleIdField = new TextField();
-    TextField terrainIdField = new TextField();
+    ComboBox<User> userIdField = new ComboBox<>();
+    ComboBox<Evenement> eventIdField = new ComboBox<>();
+    ComboBox<Salle> salleIdField = new ComboBox<>();
+    ComboBox<Terrain> terrainIdField = new ComboBox<>();
     DatePicker datePicker = new DatePicker();
-    TextField timeField = new TextField();
+    ComboBox<String> timeField = new ComboBox<>();
+    ComboBox<Time> duree=new ComboBox<>();
+    Time t1=new Time("30 min",30);
+    Time t2=new Time("1h",60);
+    Time t3=new Time("1h 30 min",90);
+    Time t4=new Time("2h",120);
+    Time t5=new Time("2h 30 min",150);
+    Time t6=new Time("3h",180);
+
+    duree.getItems().addAll(t1,t2,t3,t4,t5,t6);
+    datePicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
+        @Override
+        public void updateItem(LocalDate item, boolean empty) {
+            super.updateItem(item, empty);
+            // Disable past dates
+            if (item.isBefore(LocalDate.now())) {
+                setDisable(true);
+                setStyle("-fx-background-color: #f0f0f0;"); // Optional: Style to show disabled dates
+            }
+        }
+    });
+    // Store all times in a List for reuse
+List<String> allTimes = Arrays.asList(
+    "08:30","08:45","09:00","09:15","09:30","09:45",
+    "10:00","10:15","10:30","10:45","11:00","11:15",
+    "11:30","11:45","12:00","12:15","12:30","12:45",
+    "13:00","13:15","13:30","13:45","14:00","14:15",
+    "14:30","14:45","15:00","15:15","15:30","15:45",
+    "16:00","16:15","16:30","16:45","17:00","17:15",
+    "17:30","17:45","18:00","18:15","18:30","18:45",
+    "19:00","19:15","19:30","19:45","20:00","20:15",
+    "20:30","20:45","21:00","21:15","21:30","21:45",
+    "22:00"
+);
+
+datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+    // Clear previous time selections
+    timeField.getItems().clear();
+     long currentTimeMillis = System.currentTimeMillis();
+    LocalTime currentTime = LocalTime.now(Clock.fixed(Instant.ofEpochMilli(currentTimeMillis), ZoneId.systemDefault()));
+    if (newValue == null) return;
     
-    if (reservation != null) {
-        userIdField.setText(String.valueOf(reservation.getId_user()));
-        eventIdField.setText(String.valueOf(reservation.getId_event()));
-        salleIdField.setText(String.valueOf(reservation.getId_salle()));
-        terrainIdField.setText(String.valueOf(reservation.getId_terrain()));
-        datePicker.setValue(reservation.getDate_reservation().toLocalDate());
-        timeField.setText(reservation.getDate_reservation().toLocalTime().toString());
+    // If the selected date is today, filter times after the current time
+    if (newValue.equals(LocalDate.now())) {
+        // Force a fresh read of the current time by creating a new instance
+       
+        System.out.println(currentTime);
+        
+        for (String time : allTimes) {
+            // Extract time from string (e.g., "08:30" -> 08:30)
+            String[] parts = time.split(":");
+            LocalTime timeOption = LocalTime.of(
+                Integer.parseInt(parts[0]), 
+                Integer.parseInt(parts[1])
+            );
+            
+            // Add time options greater than the current time
+            if (timeOption.isAfter(currentTime)) {
+                timeField.getItems().add(time);
+            }
+        }
+    } else {
+        // Add all time options if the date is not today
+        timeField.getItems().addAll(allTimes);
     }
+});
+                            datePicker.setValue(LocalDate.now());
+                    
+    if (reservation != null) {
+        userIdField.setValue(new UtilisateurDAO().get(reservation.getId_user()));
+        eventIdField.setValue(new EvenmentsDAO().get(reservation.getId_event()));
+        salleIdField.setValue(new SalleDAO().get(reservation.getId_salle()));
+        terrainIdField.setValue(new TerrainDAO().get(reservation.getId_terrain()));
+        datePicker.setValue(reservation.getDate_reservation().toLocalDate());
+        timeField.setValue(reservation.getDate_reservation().toLocalTime().toString());
+    }
+    for (User user : new UtilisateurDAO().getAll()) {
+        userIdField.getItems().add(user);
+       }
+       
+       for (Evenement event : new EvenmentsDAO().getAll()) {
+        eventIdField.getItems().add(event);
+       }
+       for (Salle salle : new SalleDAO().getAll()) {
+        salleIdField.getItems().add(salle);
+       }
+
+       for (Terrain terrain : new TerrainDAO().getAll()) {
+        terrainIdField.getItems().add(terrain);
+       }
     
-    grid.add(new Label("ID Utilisateur:"), 0, 0);
+    grid.add(new Label("Utilisateur:"), 0, 0);
     grid.add(userIdField, 1, 0);
-    grid.add(new Label("ID Événement:"), 0, 1);
+    grid.add(new Label("Événement:"), 0, 1);
     grid.add(eventIdField, 1, 1);
-    grid.add(new Label("ID Salle:"), 0, 2);
+    grid.add(new Label("Salle:"), 0, 2);
     grid.add(salleIdField, 1, 2);
-    grid.add(new Label("ID Terrain:"), 0, 3);
+    grid.add(new Label("Terrain:"), 0, 3);
     grid.add(terrainIdField, 1, 3);
     grid.add(new Label("Date:"), 0, 4);
     grid.add(datePicker, 1, 4);
     grid.add(new Label("Heure:"), 0, 5);
     grid.add(timeField, 1, 5);
+    grid.add(new Label("Duree:"), 0, 6);
+    grid.add(duree, 1, 6);
     
     dialog.getDialogPane().setContent(grid);
     
@@ -173,23 +265,33 @@ private Dialog<Reservation> createReservationDialog(String title, Reservation re
             try {
                 LocalDateTime dateTime = LocalDateTime.of(
                     datePicker.getValue(),
-                    LocalTime.parse(timeField.getText())
+                    LocalTime.parse(timeField.getSelectionModel().getSelectedItem())
                 );
                 
                 if (reservation == null) {
+                    LocalDateTime startDateTime = dateTime;
+                    LocalDateTime endDateTime = dateTime.plusMinutes(duree.getSelectionModel().getSelectedItem().getInteger());
+                    System.out.println(startDateTime);
+                    System.out.println(endDateTime);
+                              if(new ReservationDAO().checkSalle(salleIdField.getSelectionModel().getSelectedItem().getId_salle(), startDateTime, endDateTime)){
+                        showError("Erreur de reservation", "le salle est reserve dans ce temps ");
+                return null;
+                    }
                     return new Reservation(
-                        Integer.parseInt(userIdField.getText()),
-                        Integer.parseInt(eventIdField.getText()),
-                        Integer.parseInt(salleIdField.getText()),
-                        Integer.parseInt(terrainIdField.getText()),
-                        dateTime
+                        userIdField.getSelectionModel().getSelectedItem().getIdUser(),
+                        eventIdField.getSelectionModel().getSelectedItem().getIdEvent(),
+                        salleIdField.getSelectionModel().getSelectedItem().getId_salle(),
+                        terrainIdField.getSelectionModel().getSelectedItem().getId_terrain(),
+                        dateTime,
+                        duree.getSelectionModel().getSelectedItem().getInteger()
                     );
                 } else {
-                    reservation.setId_user(Integer.parseInt(userIdField.getText()));
-                    reservation.setId_event(Integer.parseInt(eventIdField.getText()));
-                    reservation.setId_salle(Integer.parseInt(salleIdField.getText()));
-                    reservation.setId_terrain(Integer.parseInt(terrainIdField.getText()));
+                    reservation.setId_user(userIdField.getSelectionModel().getSelectedItem().getIdUser());
+                    reservation.setId_event(eventIdField.getSelectionModel().getSelectedItem().getIdEvent());
+                    reservation.setId_salle(salleIdField.getSelectionModel().getSelectedItem().getId_salle());
+                    reservation.setId_terrain(terrainIdField.getSelectionModel().getSelectedItem().getId_terrain());
                     reservation.setDate_reservation(dateTime);
+                    reservation.setDuree(duree.getSelectionModel().getSelectedItem().getInteger());
                     return reservation;
                 }
             } catch (NumberFormatException e) {

@@ -74,8 +74,8 @@ public class UtilisateurDAO implements GenericDAO<User> {
     }
 
     @Override
-    public List<User> getAll() {
-        List<User> users = new ArrayList<>();
+    public ArrayList<User> getAll() {
+        ArrayList<User> users = new ArrayList<>();
         String sql = "SELECT id_user, nom, prenom, email, type FROM users";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);

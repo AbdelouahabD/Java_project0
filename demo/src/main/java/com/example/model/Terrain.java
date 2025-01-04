@@ -26,10 +26,6 @@ public class Terrain {
 
     @Override
     public String toString() {
-        return "terrain{" +
-                "id_terrain=" + id_terrain +
-                ", nom_terrain='" + nom_terrain + '\'' +
-                ", type='" + type + '\'' +
-                '}';
+        return  nom_terrain;
     }
 }
