@@ -155,7 +155,7 @@ public class UserController {
             if (dialogButton == saveButtonType) {
                 if (user == null) {
                     return new User(nomField.getText(), prenomField.getText(), 
-                                  emailField.getText(), comboBox.getSelectionModel().getSelectedItem());
+                                  emailField.getText(), comboBox.getSelectionModel().getSelectedItem(),null);
                 } else {
                     user.setNom(nomField.getText());
                     user.setPrenom(prenomField.getText());

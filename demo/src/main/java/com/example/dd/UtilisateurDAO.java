@@ -98,7 +98,7 @@ public class UtilisateurDAO implements GenericDAO<User> {
 
     @Override
     public void add(User user) {
-        String sql = "INSERT INTO users (nom, prenom, email, type) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (nom, prenom, email, type,password) VALUES (?, ?, ?, ?,?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
              
@@ -106,6 +106,7 @@ public class UtilisateurDAO implements GenericDAO<User> {
             pstmt.setString(2, user.getPrenom());
             pstmt.setString(3, user.getEmail());
             pstmt.setString(4, user.getType());
+            pstmt.setString(5, user.getPassword());
             pstmt.executeUpdate();
 
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
@@ -117,5 +118,16 @@ public class UtilisateurDAO implements GenericDAO<User> {
         } catch (SQLException e) {
             System.err.println("Erreur lors de l'insertion de l'utilisateur : " + e.getMessage());
         }
+    }
+    public boolean authenticate(String email,String passwd ) throws SQLException{
+        String query="Select * from users where email=? AND password=? ";
+        Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+             pstmt.setString(1, email);
+            pstmt.setString(2, passwd);
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                return true;
+            }return false;
     }
 }                                                     

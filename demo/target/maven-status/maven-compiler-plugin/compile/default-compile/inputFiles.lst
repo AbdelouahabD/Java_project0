@@ -6,6 +6,8 @@
 /home/elmehdi/java/Java_project0/demo/src/main/java/com/example/App.java
 /home/elmehdi/java/Java_project0/demo/src/main/java/com/example/dd/SalleDAO.java
 /home/elmehdi/java/Java_project0/demo/src/main/java/com/example/controllers/MainController.java
+/home/elmehdi/java/Java_project0/demo/src/main/java/com/example/controllers/AccountController.java
+/home/elmehdi/java/Java_project0/demo/src/main/java/com/example/controllers/Time.java
 /home/elmehdi/java/Java_project0/demo/src/main/java/com/example/dd/GenericDAO.java
 /home/elmehdi/java/Java_project0/demo/src/main/java/com/example/dd/TransactionManager.java
 /home/elmehdi/java/Java_project0/demo/src/main/java/com/example/controllers/EventController.java
@@ -13,6 +15,7 @@
 /home/elmehdi/java/Java_project0/demo/src/main/java/com/example/model/User.java
 /home/elmehdi/java/Java_project0/demo/src/main/java/com/example/model/Terrain.java
 /home/elmehdi/java/Java_project0/demo/src/main/java/com/example/model/Reservation.java
+/home/elmehdi/java/Java_project0/demo/src/main/java/com/example/utils/PasswordEncryptionUtil.java
 /home/elmehdi/java/Java_project0/demo/src/main/java/com/example/dd/UtilisateurDAO.java
 /home/elmehdi/java/Java_project0/demo/src/main/java/com/example/controllers/RoomController.java
 /home/elmehdi/java/Java_project0/demo/src/main/java/com/example/dd/ReservationDAO.java

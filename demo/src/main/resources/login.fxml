@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.controllers.LoginController"
+      alignment="CENTER"
+      spacing="15"
+      style="-fx-background-color: white;"
+      maxWidth="400"
+      maxHeight="500">
+
+    <padding>
+        <Insets top="20" right="40" bottom="20" left="40"/>
+    </padding>
+
+    <Text text="Login"
+          style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+
+    <VBox spacing="5">
+        <Label text="Email"/>
+        <TextField fx:id="emailField" 
+                  promptText="Enter your email"
+                  style="-fx-pref-width: 300;"/>
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Password"/>
+        <PasswordField fx:id="passwordField"
+                      promptText="Enter your password"
+                      style="-fx-pref-width: 300;"/>
+    </VBox>
+
+    <Button text="Login"
+            style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-pref-width: 300;" onAction="#handleloginButtonAction"/>
+
+    <Hyperlink text="Forgot Password?"/>
+
+    
+</VBox>
