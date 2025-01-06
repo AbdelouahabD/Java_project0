@@ -37,18 +37,97 @@ public void setUserId(int userId) {
     @FXML
     private ListView<Reservation> reservationListView;
 
-    private ObservableList<Reservation> reservations;
+    private ObservableList<Reservation> reservations=FXCollections.observableArrayList();;
      private ReservationDAO reserdd=new ReservationDAO();
 
     @FXML
-    public void initialize(int id) {
+    public void initialize() {
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+
+        
+        System.out.println("ya mila fi ya mila fi");
+        System.out.println("ya mila fi ya mila fi");
+        loadReservations();
+        
+        // Bind or populate the reservationListView with the list
+        reservationListView.setItems(reservations);
         System.out.println("before");
-        setUserId(id);
-        System.out.println(id+" after");
+        // setUserId(id);
+        // System.out.println(id+" after");
         List<Reservation> reser = reserdd.getUserReservation(userId);
         System.out.println(userId);
         System.out.println(reser.size());
-        reservations = FXCollections.observableArrayList();
+       
         System.out.println("inserring");
              for (Reservation x : reser) {
             System.out.println("in insering");
@@ -68,6 +147,7 @@ public void setUserId(int userId) {
     private void addReservation() {
         System.out.println("start");
         System.out.println(userId);
+        initialize();
         Dialog<Reservation> dialog = createReservationDialog("Ajouter une réservation", null);
         dialog.showAndWait().ifPresent(reservation -> {
             try {
@@ -104,7 +184,8 @@ public void setUserId(int userId) {
     }
     private void loadReservations() {
         try {
-            reservations.setAll(reservationDAO.getUserReservation(userId));
+            reservations=FXCollections.observableArrayList(reservationDAO.getUserReservation(userId));
+            reservationListView.setItems(reservations);
         } catch (Exception e) {
             showError("Erreur de chargement", "Impossible de charger les réservations : " + e.getMessage());
         }

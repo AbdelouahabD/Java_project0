@@ -19,7 +19,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.TimeZone;
+
 
 import com.example.model.*;
 import com.example.dd.*;
@@ -243,7 +243,8 @@ datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
         terrainIdField.getItems().add(terrain);
        }
     
-  
+    grid.add(new Label("Utilisateur"), 0, 0);
+    grid.add(userIdField, 1, 0);
     grid.add(new Label("Événement:"), 0, 1);
     grid.add(eventIdField, 1, 1);
     grid.add(new Label("Salle:"), 0, 2);

@@ -42,7 +42,7 @@ public void showReservationsView() {
 
         // Retrieve the controller and call initialize method
         UserReservationController userReservationController = loader.getController();
-        userReservationController.setUserId(id);
+        userReservationController.initialize();
         System.out.println("maincontrodgvo"+id);
 
         // Create a new tab
