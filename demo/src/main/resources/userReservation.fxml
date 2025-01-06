@@ -8,14 +8,10 @@
 
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Button text="Ajouter" onAction="#addReservation" styleClass="action-button"/>
-        <Button text="Modifier" onAction="#editReservation" styleClass="action-button"/>
-        <Button text="Supprimer" onAction="#deleteReservation" styleClass="action-button"/>
         <TextField fx:id="searchReservationField" promptText="Rechercher une réservation..." styleClass="search-field"/>
     </HBox>
 
-   <ListView fx:id="reservationListView" VBox.vgrow="ALWAYS">
-    <items>
-       
-    </items>
-</ListView>
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+        <FlowPane fx:id="reservationFlowPane" styleClass="reservation-flow-pane"/>
+    </ScrollPane>
 </VBox>

@@ -3,18 +3,21 @@ package com.example.controllers;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import com.example.model.Evenement;
-import com.example.model.Reservation;
 import com.example.dd.EvenmentsDAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
+import javafx.scene.paint.Color;
 
 public class UserEvenementController {
     private EvenmentsDAO evenementDAO = new EvenmentsDAO();
@@ -24,7 +27,7 @@ public class UserEvenementController {
     private TextField searchReservationField;
 
     @FXML
-    private ListView<Evenement> eventListView;
+    private FlowPane eventFlowPane; // Changed from ListView to FlowPane
 
     private ObservableList<Evenement> events = FXCollections.observableArrayList();
 
@@ -38,45 +41,85 @@ public class UserEvenementController {
         setUserId(GlobalState.getInstance().getUserId());
         System.out.println("User ID set to: " + userId);
 
-        eventListView.setItems(events);
+        // Initialize FlowPane
+        eventFlowPane.setHgap(10);
+        eventFlowPane.setVgap(10);
+        eventFlowPane.setPadding(new Insets(10));
+
         loadUserEvents();
 
         searchReservationField.textProperty().addListener((observable, oldValue, newValue) -> {
             filterEvents(newValue);
         });
+    }
 
-        eventListView.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Evenement event, boolean empty) {
-                super.updateItem(event, empty);
-                if (empty || event == null) {
-                    setText(null);
-                } else {
-                    setText(event.getNomEvent() + " - " + event.getDateEvent());
-                }
-            }
-        });
+    private VBox createEventCard(Evenement event) {
+        VBox card = new VBox(10);
+        card.getStyleClass().add("event-card");
+        card.setPadding(new Insets(15));
+        card.setPrefWidth(250);
+        card.setMinHeight(200);
+
+        // Event Name
+        Label nameLabel = new Label(event.getNomEvent());
+        nameLabel.getStyleClass().add("event-title");
+
+        // Date and Time
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        Label dateLabel = new Label("Date: " + event.getDateEvent().format(formatter));
+        dateLabel.getStyleClass().add("event-date");
+
+        // Description
+        Text descriptionText = new Text(event.getDescription());
+        descriptionText.getStyleClass().add("event-description");
+        descriptionText.setWrappingWidth(220);
+
+        // Buttons Container
+        HBox buttonsBox = new HBox(10);
+        buttonsBox.setStyle("-fx-alignment: center;");
+
+        Button editButton = new Button("Edit");
+        editButton.getStyleClass().add("card-button");
+        editButton.setOnAction(e -> editEvent(event));
+
+        Button deleteButton = new Button("Delete");
+        deleteButton.getStyleClass().add("card-button");
+        deleteButton.setOnAction(e -> deleteEvent(event));
+
+        buttonsBox.getChildren().addAll(editButton, deleteButton);
+
+        // Add all elements to card
+        card.getChildren().addAll(nameLabel, dateLabel, descriptionText, buttonsBox);
+        
+        return card;
     }
 
     private void loadUserEvents() {
         try {
+            eventFlowPane.getChildren().clear();
             List<Evenement> userEvents = evenementDAO.getUserEvents(userId);
-            events.setAll(userEvents);
+            for (Evenement event : userEvents) {
+                eventFlowPane.getChildren().add(createEventCard(event));
+            }
         } catch (Exception e) {
             showError("Error Loading Events", "Could not load events: " + e.getMessage());
         }
     }
 
     private void filterEvents(String filter) {
-        if (filter == null || filter.isEmpty()) {
-            eventListView.setItems(events);
-        } else {
+        try {
+            eventFlowPane.getChildren().clear();
+            List<Evenement> userEvents = evenementDAO.getUserEvents(userId);
             String lowerCaseFilter = filter.toLowerCase();
-            ObservableList<Evenement> filteredEvents = events.filtered(event ->
-                    event.getNomEvent().toLowerCase().contains(lowerCaseFilter) ||
-                    event.getDescription().toLowerCase().contains(lowerCaseFilter)
-            );
-            eventListView.setItems(filteredEvents);
+            
+            for (Evenement event : userEvents) {
+                if (event.getNomEvent().toLowerCase().contains(lowerCaseFilter) ||
+                    event.getDescription().toLowerCase().contains(lowerCaseFilter)) {
+                    eventFlowPane.getChildren().add(createEventCard(event));
+                }
+            }
+        } catch (Exception e) {
+            showError("Error Filtering Events", "Could not filter events: " + e.getMessage());
         }
     }
 
@@ -94,18 +137,24 @@ public class UserEvenementController {
         });
     }
 
-    @FXML
-    private void deleteEvent() {
-        Evenement selectedEvent = eventListView.getSelectionModel().getSelectedItem();
-        if (selectedEvent == null) {
-            showWarning("No Selection", "Please select an event to delete.");
-            return;
-        }
+    private void editEvent(Evenement event) {
+        Dialog<Evenement> dialog = createEventDialog("Edit Event", event);
+        dialog.showAndWait().ifPresent(updatedEvent -> {
+            try {
+                evenementDAO.update(updatedEvent);
+                loadUserEvents();
+                showInfo("Success", "Event updated successfully.");
+            } catch (Exception e) {
+                showError("Edit Event Error", "Could not update event: " + e.getMessage());
+            }
+        });
+    }
 
+    private void deleteEvent(Evenement event) {
         boolean confirmation = showConfirmation("Delete Event", "Are you sure you want to delete this event?");
         if (confirmation) {
             try {
-                evenementDAO.delete(selectedEvent.getIdEvent());
+                evenementDAO.delete(event.getIdEvent());
                 loadUserEvents();
                 showInfo("Success", "Event deleted successfully.");
             } catch (Exception e) {
@@ -113,24 +162,6 @@ public class UserEvenementController {
             }
         }
     }
-    @FXML void editEvent(){
-        Evenement selectedEvenement = eventListView.getSelectionModel().getSelectedItem();
-        if (selectedEvenement != null) {
-            Dialog<Evenement> dialog = createEventDialog("Modifier la réservation", selectedEvenement);
-        dialog.showAndWait().ifPresent(event -> {
-            try {
-                evenementDAO.update(event);
-                loadUserEvents();
-                showInfo("Succès", "Réservation modifiée avec succès");
-            } catch (Exception e) {
-                showError("Erreur de modification", "Impossible de modifier la réservation : " + e.getMessage());
-            }
-        });
-        } else {
-            showAlert("No Selection", "Please select a reservation to edit.");
-        }
-    }
-
     private Dialog<Evenement> createEventDialog(String title, Evenement event) {
         Dialog<Evenement> dialog = new Dialog<>();
         dialog.setTitle(title);

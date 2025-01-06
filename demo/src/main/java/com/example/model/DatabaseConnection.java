@@ -11,9 +11,9 @@ public class DatabaseConnection {
     static {
         try {
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl("jdbc:mysql://localhost:3306/testdb");
+            config.setJdbcUrl("jdbc:mysql://localhost:3306/gestion_evenementt");
             config.setUsername("root");
-            config.setPassword("mahdi2005");
+            config.setPassword("");
             config.setMaximumPoolSize(10);
             
             dataSource = new HikariDataSource(config);

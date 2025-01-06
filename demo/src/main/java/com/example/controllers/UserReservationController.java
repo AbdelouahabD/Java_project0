@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.List;
@@ -15,8 +16,12 @@ import com.example.model.Terrain;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import com.example.dd.EvenmentsDAO;
 import com.example.dd.ReservationDAO;
@@ -34,120 +39,205 @@ public void setUserId(int userId) {
     @FXML
     private TextField searchReservationField;
 
-    @FXML
-    private ListView<Reservation> reservationListView;
+    // Modifier la déclaration du FlowPane (remplacer ListView)
+@FXML
+private FlowPane reservationFlowPane;
 
     private ObservableList<Reservation> reservations=FXCollections.observableArrayList();;
      private ReservationDAO reserdd=new ReservationDAO();
 
-    @FXML
-    public void initialize() {
-        System.out.println("setting id in intialize ");
-        setUserId(GlobalState.getInstance().getUserId());
-        System.out.println("id is "+userId);
-     System.out.println("calling initialize");
-       
-        
-                reservationListView.setItems(reservations);
-      
-        List<Reservation> reser = reserdd.getUserReservation(userId);
-        
-       
-       
-             for (Reservation x : reser) {
-                   reservations.add(x);
-        } 
-     
+    // Modifier la méthode initialize
+@FXML
+public void initialize() {
+    System.out.println("setting id in initialize ");
+    setUserId(GlobalState.getInstance().getUserId());
+    System.out.println("id is "+userId);
+    System.out.println("calling initialize");
 
-        reservationListView.setItems(reservations);
+    // Initialize FlowPane
+    reservationFlowPane.setHgap(10);
+    reservationFlowPane.setVgap(10);
+    reservationFlowPane.setPadding(new Insets(10));
 
-        // Add listener for search field
-        searchReservationField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterReservations(newValue);
-        });
-    }
+    loadReservations();
 
-    @FXML
-    private void addReservation() {
-        System.out.println("setting id in addreservation ");
-        setUserId(GlobalState.getInstance().getUserId());
-       System.out.println("id is "+userId);
+    // Add listener for search field
+    searchReservationField.textProperty().addListener((observable, oldValue, newValue) -> {
+        filterReservations(newValue);
+    });
+}
 
-               loadReservations();
-        Dialog<Reservation> dialog = createReservationDialog("Ajouter une réservation", null);
-        dialog.showAndWait().ifPresent(reservation -> {
-            try {
-                reservationDAO.add(reservation);
-                showInfo("Succès", "Réservation ajoutée avec succès");
-                reservations.add(reservation);
-                reservationListView.getSelectionModel().select(reservation);
-            } catch (Exception e) {
-                showError("Erreur d'ajout", "Impossible d'ajouter la réservation : " + e.getMessage());
-            }
-        });
-       // Replace with input dialog or custom logic
-       
-    }
+// Nouvelle méthode pour créer une carte de réservation
+private VBox createReservationCard(Reservation reservation) {
+    VBox card = new VBox(10);
+    card.getStyleClass().add("reservation-card");
+    card.setPadding(new Insets(15));
+    card.setPrefWidth(300);
+    card.setMinHeight(200);
 
-    @FXML
-    private void editReservation() {
-        Reservation selectedReservation = reservationListView.getSelectionModel().getSelectedItem();
-        if (selectedReservation != null) {
-            Dialog<Reservation> dialog = createReservationDialog("Modifier la réservation", selectedReservation);
+    // Événement
+    Label eventLabel = new Label("Événement: " + new EvenmentsDAO().get(reservation.getId_event()).getNomEvent());
+    eventLabel.getStyleClass().add("reservation-title");
+
+    // Date et Heure
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    Label dateLabel = new Label("Date: " + reservation.getDate_reservation().format(formatter));
+    dateLabel.getStyleClass().add("reservation-date");
+
+    // Durée
+    Label dureeLabel = new Label("Durée: " + reservation.getDuree() + " minutes");
+    dureeLabel.getStyleClass().add("reservation-info");
+
+    // Salle
+    Salle salle = new SalleDAO().get(reservation.getId_salle());
+    Label salleLabel = new Label("Salle: " + salle.getNom_salle());
+    salleLabel.getStyleClass().add("reservation-info");
+
+    // Terrain
+    Terrain terrain = new TerrainDAO().get(reservation.getId_terrain());
+    Label terrainLabel = new Label("Terrain: " + terrain.getNom_terrain());
+    terrainLabel.getStyleClass().add("reservation-info");
+
+    // Buttons Container
+    HBox buttonsBox = new HBox(10);
+    buttonsBox.setStyle("-fx-alignment: center;");
+
+    Button editButton = new Button("Modifier");
+    editButton.getStyleClass().add("card-button");
+    editButton.setOnAction(e -> editReservation(reservation));
+
+    Button deleteButton = new Button("Supprimer");
+    deleteButton.getStyleClass().add("card-button-delete");
+    deleteButton.setOnAction(e -> deleteReservation(reservation));
+
+    buttonsBox.getChildren().addAll(editButton, deleteButton);
+
+    card.getChildren().addAll(
+        eventLabel, 
+        dateLabel, 
+        dureeLabel,
+        salleLabel,
+        terrainLabel,
+        buttonsBox
+    );
+
+    return card;
+}
+@FXML
+private void addReservation() {
+    System.out.println("setting id in addreservation ");
+    setUserId(GlobalState.getInstance().getUserId());
+    System.out.println("id is "+userId);
+
+    Dialog<Reservation> dialog = createReservationDialog("Ajouter une réservation", null);
+    dialog.showAndWait().ifPresent(reservation -> {
+        try {
+            reservationDAO.add(reservation);
+            loadReservations(); // Recharger toutes les réservations
+            showInfo("Succès", "Réservation ajoutée avec succès");
+        } catch (Exception e) {
+            showError("Erreur d'ajout", "Impossible d'ajouter la réservation : " + e.getMessage());
+        }
+    });
+}
+
+// Modifier la méthode editReservation pour accepter un paramètre Reservation
+@FXML
+private void editReservation(Reservation selectedReservation) {
+    if (selectedReservation != null) {
+        Dialog<Reservation> dialog = createReservationDialog("Modifier la réservation", selectedReservation);
         dialog.showAndWait().ifPresent(reservation -> {
             try {
                 reservationDAO.update(reservation);
-                loadReservations();
+                loadReservations(); // Recharger toutes les réservations
                 showInfo("Succès", "Réservation modifiée avec succès");
             } catch (Exception e) {
                 showError("Erreur de modification", "Impossible de modifier la réservation : " + e.getMessage());
             }
         });
-        } else {
-            showAlert("No Selection", "Please select a reservation to edit.");
-        }
-       
+    } else {
+        showAlert("No Selection", "Please select a reservation to edit.");
     }
-    private void loadReservations() {
-        try {
-            reservations=FXCollections.observableArrayList(reservationDAO.getUserReservation(userId));
-            reservationListView.setItems(reservations);
-        } catch (Exception e) {
-            showError("Erreur de chargement", "Impossible de charger les réservations : " + e.getMessage());
+}
+    // Modifier la méthode loadReservations
+private void loadReservations() {
+    try {
+        reservationFlowPane.getChildren().clear();
+        List<Reservation> userReservations = reservationDAO.getUserReservation(userId);
+        for (Reservation reservation : userReservations) {
+            reservationFlowPane.getChildren().add(createReservationCard(reservation));
         }
+    } catch (Exception e) {
+        showError("Erreur de chargement", "Impossible de charger les réservations : " + e.getMessage());
     }
+}
 
-    @FXML
-    private void deleteReservation() {
-        Reservation selectedReservation = reservationListView.getSelectionModel().getSelectedItem();
-        if (selectedReservation != null) {
-            reservations.remove(selectedReservation);
+@FXML
+private void deleteReservation(Reservation selectedReservation) {
+    if (selectedReservation != null) {
+        boolean confirmation = showConfirmation("Supprimer la réservation", 
+            "Êtes-vous sûr de vouloir supprimer cette réservation ?");
+            
+        if (confirmation) {
             try {
                 reservationDAO.delete(selectedReservation.getId_reservation());
-                loadReservations();
+                loadReservations(); // Recharger toutes les réservations
                 showInfo("Succès", "Réservation supprimée avec succès");
             } catch (Exception e) {
-                showError("Erreur de suppression", "Impossible de supprimer la réservation : " + e.getMessage());
-        } }else {
-            showAlert("No Selection", "Please select a reservation to delete.");
+                showError("Erreur de suppression", 
+                    "Impossible de supprimer la réservation : " + e.getMessage());
+            }
         }
-        
-
     }
+}
 
-    private void filterReservations(String query) {
+// Ajouter cette méthode pour la confirmation
+private boolean showConfirmation(String title, String message) {
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
+}
+    // Modifier la méthode filterReservations
+private void filterReservations(String query) {
+    try {
+        reservationFlowPane.getChildren().clear();
+        List<Reservation> userReservations = reservationDAO.getUserReservation(userId);
+        
         if (query == null || query.isEmpty()) {
-            reservationListView.setItems(reservations);
+            for (Reservation reservation : userReservations) {
+                reservationFlowPane.getChildren().add(createReservationCard(reservation));
+            }
         } else {
-            ObservableList<Reservation> filteredList = FXCollections.observableArrayList();
-            for (Reservation reservation : reservations) {
-                if (reservation.toString().toLowerCase().contains(query.toLowerCase())) {
-                    filteredList.add(reservation);
+            String lowerCaseQuery = query.toLowerCase();
+            for (Reservation reservation : userReservations) {
+                if (matchesSearch(reservation, lowerCaseQuery)) {
+                    reservationFlowPane.getChildren().add(createReservationCard(reservation));
                 }
             }
-            reservationListView.setItems(filteredList);
         }
-   }
+    } catch (Exception e) {
+        showError("Erreur de filtrage", "Impossible de filtrer les réservations : " + e.getMessage());
+    }
+}
+
+// Nouvelle méthode pour la recherche
+private boolean matchesSearch(Reservation reservation, String query) {
+    try {
+        String eventName = new EvenmentsDAO().get(reservation.getId_event()).getNomEvent().toLowerCase();
+        String salleName = new SalleDAO().get(reservation.getId_salle()).getNom_salle().toLowerCase();
+        String terrainName = new TerrainDAO().get(reservation.getId_terrain()).getNom_terrain().toLowerCase();
+        String dateStr = reservation.getDate_reservation().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")).toLowerCase();
+
+        return eventName.contains(query) ||
+               salleName.contains(query) ||
+               terrainName.contains(query) ||
+               dateStr.contains(query);
+    } catch (Exception e) {
+        return false;
+    }
+}
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);

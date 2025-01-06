@@ -8,14 +8,10 @@
 
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Button text="Ajouter" onAction="#addEvent" styleClass="action-button"/>
-        <Button text="Modifier" onAction="#editEvent" styleClass="action-button"/>
-        <Button text="Supprimer" onAction="#deleteEvent" styleClass="action-button"/>
         <TextField fx:id="searchReservationField" promptText="Rechercher une réservation..." styleClass="search-field"/>
     </HBox>
 
-   <ListView fx:id="eventListView" VBox.vgrow="ALWAYS">
-    <items>
-       
-    </items>
-</ListView>
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+        <FlowPane fx:id="eventFlowPane" styleClass="event-flow-pane"/>
+    </ScrollPane>
 </VBox>
