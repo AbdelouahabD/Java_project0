@@ -92,6 +92,23 @@ private final UtilisateurDAO userda0=new UtilisateurDAO();
     private void handleLoginLinkAction() {
         // Handle "Log in" hyperlink action
         System.out.println("Redirecting to login...");
+        Stage currentStage = (Stage) loginLink.getScene().getWindow();
+        try {
+            // Load the new FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
+            Parent root = loader.load();
+            
+            // Create new scene
+            Scene scene = new Scene(root);
+            
+            // Set the scene on current stage
+            currentStage.setScene(scene);
+            currentStage.show();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            showWarningDialog("Error", "Could not load the next page");
+        }
         // Add logic for navigation to the login view
     }
 

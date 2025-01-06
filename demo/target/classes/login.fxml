@@ -40,7 +40,7 @@
     <Button text="Login"
             style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-pref-width: 300;" onAction="#handleloginButtonAction"/>
 
-    <Hyperlink text="Forgot Password?"/>
+    <Hyperlink fx:id="hyperlink"  text="wax ma3ndkx account w9rk hna?" onAction="#handlesignupButtonAction"/>
 
     
 </VBox>

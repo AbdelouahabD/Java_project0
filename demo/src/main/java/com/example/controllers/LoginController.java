@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
-
+import javafx.scene.control.Hyperlink;
 import java.io.IOException;
 
 import com.example.dd.UtilisateurDAO;
@@ -21,9 +21,30 @@ public class LoginController {
     private TextField emailField;
     @FXML
     private PasswordField passwordField;
+    @FXML
+    private Hyperlink hyperlink;
      @FXML
     private void initialize() {
        
+    }
+    public void handlesignupButtonAction(){
+        Stage currentStage = (Stage) emailField.getScene().getWindow();
+        try {
+            // Load the new FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Account.fxml"));
+            Parent root = loader.load();
+            
+            // Create new scene
+            Scene scene = new Scene(root);
+            
+            // Set the scene on current stage
+            currentStage.setScene(scene);
+            currentStage.show();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            showWarningDialog("Error", "Could not load the next page");
+        }
     }
     public void handleloginButtonAction()throws Exception{
         
