@@ -67,12 +67,10 @@ if(role.equals("admin")){
                 
                 // Create new scene
                 Scene scene = new Scene(root);
-                UsermainController userMainController = loader.getController();
-                userMainController.setId(userId); 
-                System.out.println(userId); // Add this method to UserReservationController
-                // Set the scene on current stage
+                GlobalState.getInstance().setUserId(userId); // Set the user ID
                 currentStage.setScene(scene);
                 currentStage.show();
+                
                 
             } catch (IOException e) {
                 e.printStackTrace();

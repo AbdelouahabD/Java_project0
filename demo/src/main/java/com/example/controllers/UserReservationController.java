@@ -26,9 +26,9 @@ import com.example.dd.TerrainDAO;
 
 public class UserReservationController {
 private ReservationDAO reservationDAO=new ReservationDAO();
-private int userId=30;
+private int userId;
 public void setUserId(int userId) {
-    this.userId = 30;
+    this.userId = userId;
 }
 
     @FXML
@@ -42,98 +42,22 @@ public void setUserId(int userId) {
 
     @FXML
     public void initialize() {
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-
-        
-        System.out.println("ya mila fi ya mila fi");
-        System.out.println("ya mila fi ya mila fi");
-        loadReservations();
-        
-        // Bind or populate the reservationListView with the list
-        reservationListView.setItems(reservations);
-        System.out.println("before");
-        // setUserId(id);
-        // System.out.println(id+" after");
-        List<Reservation> reser = reserdd.getUserReservation(userId);
-        System.out.println(userId);
-        System.out.println(reser.size());
+        System.out.println("setting id in intialize ");
+        setUserId(GlobalState.getInstance().getUserId());
+        System.out.println("id is "+userId);
+     System.out.println("calling initialize");
        
-        System.out.println("inserring");
+        
+                reservationListView.setItems(reservations);
+      
+        List<Reservation> reser = reserdd.getUserReservation(userId);
+        
+       
+       
              for (Reservation x : reser) {
-            System.out.println("in insering");
-            reservations.add(x);
+                   reservations.add(x);
         } 
-        System.out.println("done inserring");
+     
 
         reservationListView.setItems(reservations);
 
@@ -145,9 +69,11 @@ public void setUserId(int userId) {
 
     @FXML
     private void addReservation() {
-        System.out.println("start");
-        System.out.println(userId);
-        initialize();
+        System.out.println("setting id in addreservation ");
+        setUserId(GlobalState.getInstance().getUserId());
+       System.out.println("id is "+userId);
+
+               loadReservations();
         Dialog<Reservation> dialog = createReservationDialog("Ajouter une réservation", null);
         dialog.showAndWait().ifPresent(reservation -> {
             try {
