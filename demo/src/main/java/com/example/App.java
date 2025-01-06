@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Account.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
         Scene scene = new Scene(loader.load(), 800, 600);
 
         primaryStage.setTitle("Gestion de Reservation de Est Essaouira");

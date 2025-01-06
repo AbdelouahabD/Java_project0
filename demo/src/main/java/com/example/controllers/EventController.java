@@ -207,6 +207,8 @@ public class EventController {
         
         return dialog;
     }
+
+    //////////////
     private void showError(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);

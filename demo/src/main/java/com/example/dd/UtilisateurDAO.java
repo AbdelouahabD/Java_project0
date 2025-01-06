@@ -1,4 +1,5 @@
 package com.example.dd;
+import java.security.PublicKey;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -130,4 +131,27 @@ public class UtilisateurDAO implements GenericDAO<User> {
                 return true;
             }return false;
     }
+    public String role(String email,String passwd)throws SQLException{
+        String query="Select * from users where email=? AND password=? ";
+        Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+             pstmt.setString(1, email);
+            pstmt.setString(2, passwd);
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+               return rs.getString("role");
+            }return null;
+    }
+    public int getID(String email,String passwd)throws SQLException{
+        String query="Select * from users where email=? AND password=? ";
+        Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+             pstmt.setString(1, email);
+            pstmt.setString(2, passwd);
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+               return rs.getInt("id_user");
+            
+    }
+    
 }                                                     

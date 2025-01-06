@@ -1,8 +1,6 @@
 package com.example.controllers;
 
 import com.example.utils.PasswordEncryptionUtil;
-
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextField;
@@ -38,8 +36,12 @@ authenticate(email, password);
     public void authenticate(String email,String password) throws Exception{
 String encryptedPassword = PasswordEncryptionUtil.encrypt(password, ENCRYPTION_KEY);
 if(userdd.authenticate(email, encryptedPassword)){
+    String role=userdd.role(email, encryptedPassword);
 showSuccessDialog("success", "you are logged in");
- Stage currentStage = (Stage) emailField.getScene().getWindow(); // emailField is your TextField's fx:id
+Stage currentStage = (Stage) emailField.getScene().getWindow();
+int userId=userdd.getID(email, encryptedPassword);
+if(role.equals("admin")){
+ // emailField is your TextField's fx:id
         
         try {
             // Load the new FXML
@@ -56,6 +58,26 @@ showSuccessDialog("success", "you are logged in");
         } catch (IOException e) {
             e.printStackTrace();
             showWarningDialog("Error", "Could not load the next page");
+        }}else{
+            try {
+                // Load the new FXML
+                
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/usermain.fxml"));
+                Parent root = loader.load();
+                
+                // Create new scene
+                Scene scene = new Scene(root);
+                UsermainController userMainController = loader.getController();
+                userMainController.setId(userId); 
+                System.out.println(userId); // Add this method to UserReservationController
+                // Set the scene on current stage
+                currentStage.setScene(scene);
+                currentStage.show();
+                
+            } catch (IOException e) {
+                e.printStackTrace();
+                showWarningDialog("Error", "Could not load the next page");
+            }
         }
 }else{
     showWarningDialog("faillure","you made a mistake");

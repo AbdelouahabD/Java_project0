@@ -145,4 +145,34 @@ public class ReservationDAO implements GenericDAO<Reservation> {
             e.printStackTrace(); // You should properly handle this exception
             return false;
         }
-    }}
+    }
+    public List<Reservation> getUserReservation(int id) {
+        String query = "SELECT * FROM reservations WHERE id_user = ?";
+        List<Reservation> reservations = new ArrayList<>();
+        
+        // Use PreparedStatement instead of Statement for parameterized queries
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {  // Changed from Statement to PreparedStatement
+            
+            pstmt.setInt(1, id); 
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                Reservation reservation = new Reservation();
+                reservation.setId_reservation(rs.getInt("id_reservation"));
+                reservation.setId_user(rs.getInt("id_user"));
+                reservation.setId_event(rs.getInt("id_event"));
+                reservation.setId_salle(rs.getInt("id_salle"));
+                reservation.setId_terrain(rs.getInt("id_terrain"));
+                reservation.setDuree(rs.getInt("duree"));
+                reservation.setDate_reservation(rs.getTimestamp("date_reservation").toLocalDateTime());
+                reservations.add(reservation);
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("erreur lors de la selection des reservation : " + e.getMessage());
+        }
+        
+        return reservations;
+    }
+}
