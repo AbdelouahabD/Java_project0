@@ -1,56 +1,55 @@
 package com.example.controllers;
 
-import com.example.model.Evenement;
-import com.example.model.User;
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
+import java.util.List;
 
+import com.example.model.Evenement;
+import com.example.model.Reservation;
 import com.example.dd.EvenmentsDAO;
-import com.example.dd.UtilisateurDAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 public class UserEvenementController {
+    private EvenmentsDAO evenementDAO = new EvenmentsDAO();
     private int userId;
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-    
-    @FXML
-    private ListView<Evenement> eventListView;
 
     @FXML
     private TextField searchReservationField;
 
-    private final EvenmentsDAO evenementDAO = new EvenmentsDAO();
-    private final ObservableList<Evenement> eventList = FXCollections.observableArrayList();
-    private FilteredList<Evenement> filteredEvents;
-
     @FXML
-    public void initialize(int id) {
-        setUserId(id);
-        initializeListView();
-        setupSearch();
-        loadEvents();
+    private ListView<Evenement> eventListView;
+
+    private ObservableList<Evenement> events = FXCollections.observableArrayList();
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    private void initializeListView() {
-        filteredEvents = new FilteredList<>(eventList, p -> true);
-        eventListView.setItems(filteredEvents);
+    @FXML
+    public void initialize() {
+        System.out.println("Initializing UserEvenementController");
+        setUserId(GlobalState.getInstance().getUserId());
+        System.out.println("User ID set to: " + userId);
+
+        eventListView.setItems(events);
+        loadUserEvents();
+
+        searchReservationField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterEvents(newValue);
+        });
 
         eventListView.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(Evenement event, boolean empty) {
                 super.updateItem(event, empty);
-                if (empty || event == null || event.getNomEvent() == null) {
+                if (empty || event == null) {
                     setText(null);
                 } else {
                     setText(event.getNomEvent() + " - " + event.getDateEvent());
@@ -59,83 +58,147 @@ public class UserEvenementController {
         });
     }
 
-    private void setupSearch() {
-        searchReservationField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredEvents.setPredicate(event -> {
-                if (newValue == null || newValue.isEmpty()) return true;
-                String lowerCaseFilter = newValue.toLowerCase();
-                return event.getNomEvent().toLowerCase().contains(lowerCaseFilter) ||
-                       event.getDescription().toLowerCase().contains(lowerCaseFilter);
-            });
-        });
+    private void loadUserEvents() {
+        try {
+            List<Evenement> userEvents = evenementDAO.getUserEvents(userId);
+            events.setAll(userEvents);
+        } catch (Exception e) {
+            showError("Error Loading Events", "Could not load events: " + e.getMessage());
+        }
+    }
+
+    private void filterEvents(String filter) {
+        if (filter == null || filter.isEmpty()) {
+            eventListView.setItems(events);
+        } else {
+            String lowerCaseFilter = filter.toLowerCase();
+            ObservableList<Evenement> filteredEvents = events.filtered(event ->
+                    event.getNomEvent().toLowerCase().contains(lowerCaseFilter) ||
+                    event.getDescription().toLowerCase().contains(lowerCaseFilter)
+            );
+            eventListView.setItems(filteredEvents);
+        }
     }
 
     @FXML
     private void addEvent() {
-        // Logic to add a new event
-        showInfo("Ajouter", "Ajout d'un nouvel événement non implémenté");
-        Dialog<Evenement> dialog = createEventDialog("Ajouter un événement", null);
+        Dialog<Evenement> dialog = createEventDialog("Add Event", null);
         dialog.showAndWait().ifPresent(event -> {
             try {
                 evenementDAO.add(event);
-                loadEvents();
-                showInfo("Succès", "Événement ajouté avec succès");
+                loadUserEvents();
+                showInfo("Success", "Event added successfully.");
             } catch (Exception e) {
-                showError("Erreur d'ajout", "Impossible d'ajouter l'événement : " + e.getMessage());
+                showError("Add Event Error", "Could not add event: " + e.getMessage());
             }
         });
     }
 
     @FXML
-    private void editEvent() {
-        Evenement selected = eventListView.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showWarning("Sélection requise", "Veuillez sélectionner un événement à modifier");
-            return;
-        }
-        // Logic to edit the selected event
-        showInfo("Modifier", "Modification de l'événement non implémentée");
-    }
-
-    @FXML
     private void deleteEvent() {
-        Evenement selected = eventListView.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showWarning("Sélection requise", "Veuillez sélectionner un événement à supprimer");
+        Evenement selectedEvent = eventListView.getSelectionModel().getSelectedItem();
+        if (selectedEvent == null) {
+            showWarning("No Selection", "Please select an event to delete.");
             return;
         }
 
-        if (showConfirmation("Confirmation", "Voulez-vous vraiment supprimer cet événement ?")) {
+        boolean confirmation = showConfirmation("Delete Event", "Are you sure you want to delete this event?");
+        if (confirmation) {
             try {
-                evenementDAO.delete(selected.getIdEvent());
-                loadEvents();
-                showInfo("Succès", "Événement supprimé avec succès");
+                evenementDAO.delete(selectedEvent.getIdEvent());
+                loadUserEvents();
+                showInfo("Success", "Event deleted successfully.");
             } catch (Exception e) {
-                showError("Erreur de suppression", "Impossible de supprimer l'événement : " + e.getMessage());
+                showError("Delete Event Error", "Could not delete event: " + e.getMessage());
             }
         }
     }
-
-    private void loadEvents() {
-        try {
-            eventList.setAll(evenementDAO.getAll());
-        } catch (Exception e) {
-            showError("Erreur de chargement", "Impossible de charger les événements : " + e.getMessage());
+    @FXML void editEvent(){
+        Evenement selectedEvenement = eventListView.getSelectionModel().getSelectedItem();
+        if (selectedEvenement != null) {
+            Dialog<Evenement> dialog = createEventDialog("Modifier la réservation", selectedEvenement);
+        dialog.showAndWait().ifPresent(event -> {
+            try {
+                evenementDAO.update(event);
+                loadUserEvents();
+                showInfo("Succès", "Réservation modifiée avec succès");
+            } catch (Exception e) {
+                showError("Erreur de modification", "Impossible de modifier la réservation : " + e.getMessage());
+            }
+        });
+        } else {
+            showAlert("No Selection", "Please select a reservation to edit.");
         }
+    }
+
+    private Dialog<Evenement> createEventDialog(String title, Evenement event) {
+        Dialog<Evenement> dialog = new Dialog<>();
+        dialog.setTitle(title);
+
+        ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        TextField nomField = new TextField();
+        DatePicker datePicker = new DatePicker();
+        ComboBox<String> timeComboBox = new ComboBox<>();
+        TextArea descriptionArea = new TextArea();
+
+        timeComboBox.getItems().addAll(
+                "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00",
+                "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"
+        );
+
+        if (event != null) {
+            nomField.setText(event.getNomEvent());
+            datePicker.setValue(event.getDateEvent().toLocalDate());
+            timeComboBox.setValue(event.getDateEvent().toLocalTime().toString());
+            descriptionArea.setText(event.getDescription());
+        }
+
+        grid.add(new Label("Name:"), 0, 0);
+        grid.add(nomField, 1, 0);
+        grid.add(new Label("Date:"), 0, 1);
+        grid.add(datePicker, 1, 1);
+        grid.add(new Label("Time:"), 0, 2);
+        grid.add(timeComboBox, 1, 2);
+        grid.add(new Label("Description:"), 0, 3);
+        grid.add(descriptionArea, 1, 3);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == saveButtonType) {
+                try {
+                    LocalDateTime dateTime = LocalDateTime.of(
+                            datePicker.getValue(),
+                            LocalTime.parse(timeComboBox.getSelectionModel().getSelectedItem())
+                    );
+                    if (event == null) {
+                        return new Evenement(nomField.getText(), dateTime, descriptionArea.getText(), userId);
+                    } else {
+                        event.setNomEvent(nomField.getText());
+                        event.setDateEvent(dateTime);
+                        event.setDescription(descriptionArea.getText());
+                        return event;
+                    }
+                } catch (DateTimeParseException e) {
+                    showError("Input Error", "Invalid date or time format.");
+                    return null;
+                }
+            }
+            return null;
+        });
+
+        return dialog;
     }
 
     private void showError(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    private void showWarning(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
     }
@@ -143,7 +206,13 @@ public class UserEvenementController {
     private void showInfo(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
-        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private void showWarning(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
         alert.setContentText(content);
         alert.showAndWait();
     }
@@ -151,96 +220,13 @@ public class UserEvenementController {
     private boolean showConfirmation(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
-        alert.setHeaderText(null);
         alert.setContentText(content);
         return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
     }
-
-    private Dialog<Evenement> createEventDialog(String title, Evenement event) {
-        Dialog<Evenement> dialog = new Dialog<>();
-        dialog.setTitle(title);
-        
-        ButtonType saveButtonType = new ButtonType("Enregistrer", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
-        
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        ArrayList<User> users=new UtilisateurDAO().getAll();
-        TextField nomField = new TextField();
-        DatePicker datePicker = new DatePicker();
-        TextArea descriptionArea = new TextArea();
-        ComboBox<User> userIdField = new ComboBox<>();
-        ComboBox<String> timeComboBox = new ComboBox<>();
-        timeComboBox.getItems().addAll(
-                 "08:30","08:45","09:00","09:15","09:30","09:45",
-                             "10:00","10:15","10:30","10:45","11:00","11:15",
-                             "11:30","11:45","12:00","12:15","12:30","12:45",
-                             "13:00","13:15","13:30","13:45","14:00","14:15",
-                             "14:30","14:45","15:00","15:15","15:30","15:45",
-                             "16:00","16:15","16:30","16:45","17:00","17:15",
-                             "17:30","17:45","18:00","18:15","18:30","18:45",
-                             "19:00","19:15","19:30","19:45","20:00","20:15",
-                             "20:30","20:45","21:00","21:15","21:30","21:45",
-                             "22:00" );
-                   for (User user : users) {
-                    userIdField.getItems().add(user);
-                   }          
-        
-        if (event != null) {
-            nomField.setText(event.getNomEvent());
-            datePicker.setValue(event.getDateEvent().toLocalDate());
-            timeComboBox.setValue(event.getDateEvent().toLocalTime().toString());
-            descriptionArea.setText(event.getDescription());
-            // userIdField.setText(String.valueOf(event.getIdUser()));
-        }
-        
-        grid.add(new Label("Nom:"), 0, 0);
-        grid.add(nomField, 1, 0);
-        grid.add(new Label("Date:"), 0, 1);
-        grid.add(datePicker, 1, 1);
-        grid.add(new Label("Heure:"), 0, 2);
-        grid.add(timeComboBox, 1, 2);
-        grid.add(new Label("Description:"), 0, 3);
-        grid.add(descriptionArea, 1, 3);
-        grid.add(new Label("Utilisateur:"), 0, 4);
-        grid.add(userIdField, 1, 4);
-        
-        dialog.getDialogPane().setContent(grid);
-        
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == saveButtonType) {
-                try {
-                    LocalDateTime dateTime = LocalDateTime.of(
-                        datePicker.getValue(),
-                        LocalTime.parse(timeComboBox.getSelectionModel().getSelectedItem())
-                    );
-                    
-                    if (event == null) {
-                        return new Evenement(
-                            nomField.getText(),
-                            dateTime,
-                            descriptionArea.getText(),
-                            userIdField.getSelectionModel().getSelectedItem().getIdUser()
-                        );
-                    } else {
-                        event.setNomEvent(nomField.getText());
-                        event.setDateEvent(dateTime);
-                        event.setDescription(descriptionArea.getText());
-                        event.setIdUser(userIdField.getSelectionModel().getSelectedItem().getIdUser());
-                        return event;
-                    }
-                } catch (NumberFormatException e) {
-                    showError("Erreur de saisie", "L'ID utilisateur doit être un nombre entier");
-                    return null;
-                } catch (DateTimeParseException e) {
-                    showError("Erreur de saisie", "Format d'heure invalide (utilisez HH:mm)");
-                    return null;
-                }
-            }
-            return null;
-        });
-        
-        return dialog;
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

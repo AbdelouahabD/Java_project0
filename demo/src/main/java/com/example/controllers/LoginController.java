@@ -40,6 +40,7 @@ if(userdd.authenticate(email, encryptedPassword)){
 showSuccessDialog("success", "you are logged in");
 Stage currentStage = (Stage) emailField.getScene().getWindow();
 int userId=userdd.getID(email, encryptedPassword);
+GlobalState.getInstance().setUserId(userId);
 if(role.equals("admin")){
  // emailField is your TextField's fx:id
         
@@ -67,7 +68,7 @@ if(role.equals("admin")){
                 
                 // Create new scene
                 Scene scene = new Scene(root);
-                GlobalState.getInstance().setUserId(userId); // Set the user ID
+                // Set the user ID
                 currentStage.setScene(scene);
                 currentStage.show();
                 

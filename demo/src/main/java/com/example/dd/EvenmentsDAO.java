@@ -116,4 +116,34 @@ public class EvenmentsDAO implements GenericDAO<Evenement> {
             System.err.println("Erreur : " + e.getMessage());
         }
     }
+
+
+
+public List<Evenement> getUserEvents(int id) {
+    String query = "SELECT * FROM evenemant WHERE id_user = ?";
+    List<Evenement> Evenements = new ArrayList<>();
+    
+    // Use PreparedStatement instead of Statement for parameterized queries
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(query)) {  // Changed from Statement to PreparedStatement
+        
+        pstmt.setInt(1, id); 
+        ResultSet rs = pstmt.executeQuery();
+        
+        while (rs.next()) {
+            Evenement Evenement = new Evenement();
+            Evenement.setIdEvent(rs.getInt("id_event"));
+            Evenement.setIdUser(rs.getInt("id_user"));
+            Evenement.setNomEvent(rs.getString("nom_event"));
+            Evenement.setDateEvent(rs.getTimestamp("date_event").toLocalDateTime());
+            Evenement.setDescription(rs.getString("description"));
+            Evenements.add(Evenement);
+        }
+        
+    } catch (SQLException e) {
+        System.err.println("erreur lors de la selection des Evenements : " + e.getMessage());
+    }
+    
+    return Evenements;
+}
 }

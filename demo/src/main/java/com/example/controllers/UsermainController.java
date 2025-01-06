@@ -20,7 +20,39 @@ public class UsermainController {
 
     @FXML
 public void showEventView(){
-    // loadTab("Evènements", "/evenements.fxml");
+    String tabName = "Evenement";
+    String resourcePath = "/userEvent.fxml";
+
+    // Check if the tab already exists
+    for (Tab tab : mainTabPane.getTabs()) {
+        if (tab.getText().equals(tabName)) {
+            mainTabPane.getSelectionModel().select(tab);
+            return;
+        }
+    }
+
+    try {
+        // Load the new view
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(resourcePath));
+        Pane view = loader.load();
+
+        // Retrieve the controller
+        UserReservationController controller = loader.getController();
+        controller.setUserId(id); // Pass the userId to the controller
+        controller.initialize(); // Manually invoke initialization logic if needed
+
+        // Create a new tab
+        Tab newTab = new Tab(tabName);
+        newTab.setContent(view);
+        newTab.setClosable(true);
+
+        // Add the tab to the TabPane
+        mainTabPane.getTabs().add(newTab);
+        mainTabPane.getSelectionModel().select(newTab);
+    } catch (IOException e) {
+        e.printStackTrace();
+        showError("Erreur", "Impossible de charger la vue : " + tabName);
+    }
     
 }
 @FXML
