@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.controllers.MainController"
+            stylesheets="/main.css"
+            prefHeight="600.0" prefWidth="800.0">
+
+    <!-- Menu Bar -->
+    <top>
+        <MenuBar>
+            <Menu text="Gestion">
+                <MenuItem text="Utilisateurs" onAction="#showUsersView"/>
+                <MenuItem text="Salles" onAction="#showRoomsView"/>
+                <MenuItem text="Terrains" onAction="#showTerrainView"/>
+                                <MenuItem text="Evenement" onAction="#showEventView"/>
+
+                <MenuItem text="Réservations" onAction="#showReservationsView"/>
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <!-- Tab Pane -->
+    <center>
+        <TabPane fx:id="mainTabPane">
+            <!-- Users Tab -->
+            <Tab text="Utilisateurs" closable="false">
+                <fx:include source="users.fxml"/>
+            </Tab>
+
+            <!-- Rooms Tab -->
+            <Tab text="Salles" closable="false">
+                <fx:include source="rooms.fxml"/>
+            </Tab>
+
+            <!-- Terrains Tab -->
+            <Tab text="Terrains" closable="false">
+                <fx:include source="terrains.fxml"/>
+            </Tab>
+
+            <!-- Events Tab -->
+            <Tab text="Événements" closable="false">
+                <fx:include source="events.fxml"/>
+            </Tab>
+
+            <!-- Reservations Tab -->
+            <Tab text="Réservations" closable="false">
+                <fx:include source="reservations.fxml"/>
+            </Tab>
+        </TabPane>
+    </center>
+
+    <padding>
+        <Insets top="5" right="5" bottom="5" left="5"/>
+    </padding>
+
+</BorderPane>

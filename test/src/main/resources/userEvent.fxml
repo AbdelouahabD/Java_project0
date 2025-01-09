@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.controllers.UserEvenementController"
+      spacing="10" styleClass="content-panel">
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button text="Ajouter" onAction="#addEvent" styleClass="action-button"/>
+        <TextField fx:id="searchReservationField" promptText="Rechercher une réservation..." styleClass="search-field"/>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+        <FlowPane fx:id="eventFlowPane" styleClass="event-flow-pane"/>
+    </ScrollPane>
+</VBox>

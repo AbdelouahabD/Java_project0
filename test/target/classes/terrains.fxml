@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.controllers.TerrainController"
+      spacing="10" styleClass="content-panel">
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button text="Ajouter" onAction="#addTerrain" styleClass="action-button"/>
+        <Button text="Modifier" onAction="#editTerrain" styleClass="action-button"/>
+        <Button text="Supprimer" onAction="#deleteTerrain" styleClass="action-button"/>
+        <TextField fx:id="searchTerrainField" promptText="Rechercher un terrain..." styleClass="search-field"/>
+    </HBox>
+
+    <TableView fx:id="terrainTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="terrainIdColumn" text="ID" />
+            <TableColumn fx:id="terrainNameColumn" text="Nom" />
+            <TableColumn fx:id="terrainTypeColumn" text="Type" />
+        </columns>
+    </TableView>
+</VBox>

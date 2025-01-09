@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.controllers.EventController"
+      spacing="10" styleClass="content-panel">
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button text="Ajouter" onAction="#addEvent" styleClass="action-button"/>
+        <Button text="Modifier" onAction="#editEvent" styleClass="action-button"/>
+        <Button text="Supprimer" onAction="#deleteEvent" styleClass="action-button"/>
+        <TextField fx:id="searchEventField" promptText="Rechercher un événement..." styleClass="search-field"/>
+    </HBox>
+
+    <TableView fx:id="eventTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="eventIdColumn" text="ID" />
+            <TableColumn fx:id="eventNameColumn" text="Nom" />
+            <TableColumn fx:id="eventDateColumn" text="Date" />
+            <TableColumn fx:id="eventDescriptionColumn" text="Description" />
+            <TableColumn fx:id="eventUserIdColumn" text="Utilisateur" />
+        </columns>
+    </TableView>
+</VBox>

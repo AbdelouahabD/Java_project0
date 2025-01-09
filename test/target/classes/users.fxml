@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.controllers.UserController"
+      spacing="10" styleClass="content-panel">
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button text="Ajouter" onAction="#addUser" styleClass="action-button"/>
+        <Button text="Modifier" onAction="#editUser" styleClass="action-button"/>
+        <Button text="Supprimer" onAction="#deleteUser" styleClass="action-button"/>
+        <TextField fx:id="searchUserField" promptText="Rechercher..." styleClass="search-field"/>
+    </HBox>
+
+    <TableView fx:id="userTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" />
+            <TableColumn fx:id="nomColumn" text="Nom" />
+            <TableColumn fx:id="prenomColumn" text="Prénom" />
+            <TableColumn fx:id="emailColumn" text="Email" />
+            <TableColumn fx:id="roleColumn" text="Rôle" />
+        </columns>
+    </TableView>
+</VBox>

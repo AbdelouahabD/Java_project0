@@ -1,0 +1,106 @@
+.content-panel {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 2);
+    -fx-background-radius: 8px;
+    -fx-max-width: 400px;
+    -fx-padding: 20px;
+    -fx-alignment: center; /* Ensures the content is centered */
+}
+
+/* Title styles */
+.title-label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: hsl(101, 87%, 49%);
+    -fx-padding: 0 0 20 0;
+    -fx-alignment: center;
+}
+
+/* Field label styles */
+.field-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495e;
+    -fx-alignment: center;
+}
+
+/* Input field styles */
+.input-field {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 4px;
+    -fx-border-color: #e9ecef;
+    -fx-border-radius: 4px;
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+    -fx-alignment: center;
+}
+
+.input-field:focused {
+    -fx-background-color: white;
+    -fx-border-color: #4299e1;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 4, 0, 0, 0);
+}
+
+/* ComboBox styles */
+.combo-box-field {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 4px;
+    -fx-border-color: #e9ecef;
+    -fx-border-radius: 4px;
+    -fx-padding: 4px;
+    -fx-alignment: center;
+}
+
+.combo-box-field:focused {
+    -fx-background-color: white;
+    -fx-border-color: #4299e1;
+}
+
+.combo-box-field .arrow-button {
+    -fx-background-color: transparent;
+}
+
+/* Submit button styles */
+.submit-button {
+    -fx-background-color: #4299e1;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20 10 20;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-min-width: 200px;
+    -fx-margin-top: 20px;
+    -fx-alignment: center;
+}
+
+.submit-button:hover {
+    -fx-background-color: #3182ce;
+}
+
+.submit-button:pressed {
+    -fx-background-color: #2b6cb0;
+}
+
+/* Login link container styles */
+.login-link-container {
+    -fx-padding: 20 0 0 0;
+    -fx-alignment: center;
+}
+
+/* Secondary text styles */
+.secondary-text {
+    -fx-text-fill: #4a5568;
+    -fx-alignment: center;
+}
+
+/* Login link styles */
+.login-link {
+    -fx-text-fill: #4299e1;
+    -fx-font-weight: bold;
+    -fx-border-width: 0;
+    -fx-alignment: center;
+}
+
+.login-link:hover {
+    -fx-text-fill: #3182ce;
+}
